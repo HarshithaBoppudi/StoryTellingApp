@@ -8,7 +8,8 @@ import LoginScreen from './screens/LoginScreen'
 import DashBoardScreen from './screens/DashBoardScreen'
 import { createSwitchkNavigator,createAppContainer} from 'react-navigation';
 import { firebaseConfig } from './config';
-import * as firebase from firebase
+import * as firebase from 'firebase' 
+
 
 if(!firebase.apps.length){
   firebase.initializeApp(firebaseConfig)
@@ -27,4 +28,3 @@ export default function App() {
    <AppContainer/>
   );
 }
-

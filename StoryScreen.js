@@ -46,7 +46,7 @@ export default class StoryScreen extends React.Component {
   
     render(){
         if(!this.props.route.params){
-            this.props.navigation.navigate(Home)
+            this.props.navigation.navigate("Home")
         }
          else if(!this.state.fontsLoded){
            return( 

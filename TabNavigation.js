@@ -38,13 +38,13 @@ return(
 }
 export default BottomTabNavigator
 
-const styles=StyleSheet.create={
+const styles=StyleSheet.create({
     bottonTabStyle:{
         backgroundColor:'#254377',
         height:'5%',
         borderTopLeftRadius:30,
         borderTopRightRadius:30,
-        overflow:'Hidden',
+       
         position:'absolute'
     },
     icon:{
@@ -53,4 +53,4 @@ const styles=StyleSheet.create={
 
 
     }
-}
+})
