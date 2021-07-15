@@ -6,7 +6,7 @@ import DrawerNavigator from './navigation/DrawerNavigator';
 import LoadingScreen from './screens/LoadingScreen'
 import LoginScreen from './screens/LoginScreen'
 import DashBoardScreen from './screens/DashBoardScreen'
-import { createSwitchkNavigator,createAppContainer} from 'react-navigation';
+import { createSwitchNavigator,createAppContainer} from 'react-navigation';
 import { firebaseConfig } from './config';
 import * as firebase from 'firebase' 
 
@@ -17,7 +17,7 @@ if(!firebase.apps.length){
 else{
   firebase.app()
 }
-const SwitchNavigator=createSwitchkNavigator({
+const SwitchNavigator=createSwitchNavigator({
   LoadingScreen:LoadingScreen,
   LoginScreen:LoginScreen,
   DashBoardScreen:DashBoardScreen
