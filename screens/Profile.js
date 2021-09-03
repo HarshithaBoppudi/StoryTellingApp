@@ -44,13 +44,14 @@ export default class Profile extends React.Component {
   }
   componentDidMount(){
     this.loadFonts()
+    this.fetchUser()
   }
   async fetchUser(){
     let theme,name,image
     await firebase.database().ref('/users/'+firebase.auth().currentUser.uid).on(
       'value',function(snapshot){
         theme=snapshot.val().current_theme
-        name=snapshot.val().first_name+last_name
+        name=snapshot.val().first_name+snapshot.val().last_name
         image=snapshot.val().profile_picture
       }
     )

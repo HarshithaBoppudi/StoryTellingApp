@@ -76,6 +76,7 @@ export default class Story extends React.Component {
   componentDidMount(){
     this.loadFonts()
     this.fetchUser()
+    
   }
 
   keyExtractor=(item,index)=>{

@@ -18,8 +18,21 @@ export default class StoryCard extends React.Component {
             fontsLoded:false,
             lightTheme:true,
             story_id:this.props.story.key,
-            story_data:this.props.story.value
+            story_data:this.props.story.value,
+            isLiked:false,
+            likes:this.props.story.value.likes
           }
+        }
+
+        fetchLike=()=>{
+          firebase.database().ref('posts').child(this.state.story_id).child('likes').on('value',
+          snapshot=>{
+            var data=snapshot.val()
+            this.setState({
+              likes:data
+            })
+          })
+
         }
 
         fetchUser=()=>{
@@ -32,6 +45,26 @@ export default class StoryCard extends React.Component {
           })
         }
 
+        incrementAction=()=>{
+          if(this.state.isLiked===true){
+            firebase.database().ref('posts').child(this.state.story_id).child('likes')
+            .set(this.state.likes-1)
+            this.setState({
+              likes:this.state.likes-1,
+              isLiked:false
+            })
+          }
+          else{
+            firebase.database().ref('posts').child(this.state.story_id).child('likes')
+            .set(this.state.likes+1)
+            this.setState({
+              likes:this.state.likes+1,
+              isLiked:true
+            })
+
+          }
+        }
+
         async loadFonts(){
           await Font.loadAsync(costumFonts)
           this.setState({
@@ -41,6 +74,7 @@ export default class StoryCard extends React.Component {
         componentDidMount(){
           this.loadFonts()
           this.fetchUser()
+          this.fetchLike()
         }
         render(){
           let story=this.state.story_data
@@ -60,7 +94,7 @@ export default class StoryCard extends React.Component {
             return(
               <TouchableOpacity style={{flex:1,backgroundColor:'2072d6'}}
               onPress={()=>{
-                this.props.navigation.navigate('StoryScreen',{story:story})
+                this.props.navigation.navigate('StoryScreen',{story:story,key:this.state.story_id,isLiked:this.state.isLiked})
               }}  
               >
                 
@@ -83,13 +117,18 @@ export default class StoryCard extends React.Component {
 
                     </View>
                     <View style={styles.actionContainer}>
-                        <View style={styles.likeButton}>
-                         <Ionicons name={'heart'} size={RFValue(25)} color={this.state.lightTheme?'black':'white'} />
-                         <Text style={this.state.lightTheme?styles.likeTextLight:styles.likeText}>
-                         12k
+                      <TouchableOpacity style={this.state.isLiked?styles.likebuttonLiked:likeButtonDisliked}
+                      onPress={()=>{
+                        this.incrementAction()
+                      }}
+                      >
+                       
+                 <Ionicons name={'heart'} size={RFValue(25)} color={this.state.lightTheme?'black':'white'} />
+                 <Text style={this.state.lightTheme?styles.likeTextLight:styles.likeText}>
+                         {this.state.likes}
                          </Text>
-                        </View>
-
+                       
+                        </TouchableOpacity>
                     </View>
                     </View>
                     </TouchableOpacity>
@@ -157,7 +196,7 @@ const styles=StyleSheet.create({
         justifyContent:'center',
         alignItems:'center'
     },
-    likeButton:{
+    likebuttonLiked:{
         width:RFValue(160),
         height:RFValue(40),
         justifyContent:'center',
@@ -178,7 +217,18 @@ const styles=StyleSheet.create({
       fontFamily:'Bubblegum-Sans',
       fontSize:RFValue(25),
       marginLeft:RFValue(5)
-    }
+    },
+    likeButtonDisliked:{
+      width:RFValue(160),
+      height:RFValue(40),
+      justifyContent:'center',
+      alignItems:'center',
+      flexDirection:'row',
+      borderRadius:RFValue(30),
+      borderColor:'#e51247'
+
+  } 
+    
 
 })
                     

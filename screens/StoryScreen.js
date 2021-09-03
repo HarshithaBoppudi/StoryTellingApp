@@ -17,9 +17,45 @@ export default class StoryScreen extends React.Component {
       fontsLoded:false,
       speakerColor:'gray',
       speakerIcon:'volume-high-outline',
-      lightTheme:true
+      lightTheme:true,
+      likes:this.props.route.params.story.story.likes,
+      isLiked:this.props.route.params.isLiked
     }
   }
+
+  
+  fetchLike=()=>{
+    firebase.database().ref('posts').child(this.state.story_id).child('likes').on('value',
+    snapshot=>{
+      var data=snapshot.val()
+      this.setState({
+        likes:data
+      })
+    })
+
+  }
+
+  incrementAction=()=>{
+    if(this.state.isLiked===true){
+      firebase.database().ref('posts').child(this.state.story_id).child('likes')
+      .set(this.state.likes-1)
+      this.setState({
+        likes:this.state.likes-1,
+        isLiked:false
+      })
+    }
+    else{
+      firebase.database().ref('posts').child(this.state.story_id).child('likes')
+      .set(this.state.likes+1)
+      this.setState({
+        likes:this.state.likes+1,
+        isLiked:true
+      })
+
+    }
+  }
+
+
   fetchUser=()=>{
     let theme
     firebase.database().ref('/users/'+firebase.auth().currentUser.uid).on('value',snapshot=>{
@@ -38,6 +74,7 @@ export default class StoryScreen extends React.Component {
   componentDidMount(){
     this.loadFonts()
     this.fetchUser()
+    this.fetchLike()
   }
   async initiateTTS(title,author,story,moral){
       const currentColor=this.state.speakerColor
@@ -139,12 +176,18 @@ export default class StoryScreen extends React.Component {
 
                  </View>
                  <View style={styles.actionContainer}>
-                        <View style={styles.likeButton}>
-                         <Ionicons name={'heart'} size={RFValue(25)} color={this.state.lightTheme?'black':'white'} />
-                         <Text style={this.state.lightTheme?styles.likeTextLight:styles.likeText}>
-                         12k
+                 <TouchableOpacity style={this.state.isLiked?styles.likebuttonLiked:likeButtonDisliked}
+                      onPress={()=>{
+                        this.incrementAction()
+                      }}
+                      >
+                       
+                 <Ionicons name={'heart'} size={RFValue(25)} color={this.state.lightTheme?'black':'white'} />
+                 <Text style={this.state.lightTheme?styles.likeTextLight:styles.likeText}>
+                         {this.state.likes}
                          </Text>
-                        </View>
+                       
+                        </TouchableOpacity>
 
                     </View>
 
@@ -281,6 +324,26 @@ storyCardLight:{
   backgroundColor:'white',
   borderRadius:RFValue(20)
 },
+likeButtonDisliked:{
+  width:RFValue(160),
+  height:RFValue(40),
+  justifyContent:'center',
+  alignItems:'center',
+  flexDirection:'row',
+  borderRadius:RFValue(30),
+  borderColor:'#e51247'
+
+} ,
+likebuttonLiked:{
+  width:RFValue(160),
+  height:RFValue(40),
+  justifyContent:'center',
+  alignItems:'center',
+  flexDirection:'row',
+  borderRadius:RFValue(30),
+  backgroundColor:'#e51247'
+
+} 
 
 
 

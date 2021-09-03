@@ -3,7 +3,6 @@ import { StyleSheet, Text, View,SafeAreaView,StatusBar,Platform,Image,FlatList, 
 import * as Font from 'expo-font'
 import { RFValue } from 'react-native-responsive-fontsize';
 import AppLoading from 'expo-app-loading'
-import StoryCard from './StoryCard'
 import  firebase from 'firebase'
 import * as Google from 'expo-google-app-auth'
 
